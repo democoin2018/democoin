@@ -1,0 +1,26 @@
+[Unit]
+Description=Demo Coin's distributed currency daemon
+After=network.target
+
+[Service]
+User=democoin
+Group=democoin
+
+Type=forking
+PIDFile=/var/lib/democoind/democoind.pid
+
+ExecStart=/usr/bin/democoind -daemon -pid=/var/lib/democoind/democoind.pid \
+          -conf=/etc/democoin/democoin.conf -datadir=/var/lib/democoind
+
+ExecStop=-/usr/bin/democoin-cli -conf=/etc/democoin/democoin.conf \
+         -datadir=/var/lib/democoind stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
